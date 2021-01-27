@@ -1,37 +1,23 @@
+import http from './http';
 import * as Auth from '../utils/auth';
 
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
-
-export function registerUser({
-  name = '',
-  username = '',
-  email = '',
-  password = '',
-  passwordConfirmation,
-}) {
-  return fetch(`${BASE_API_URL}/users`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name,
+export function login({ username = '', password = '' }) {
+  return http
+    .post('/users/login', {
       username,
-      email,
       password,
-      passwordConfirmation,
-    }),
-  })
-    .then((response) => {
-      return response.json();
     })
-    .then((data) => {
+    .then((response) => {
+      const { data = {} } = response;
+
       const { success, items = [] } = data;
+      const [item = {}] = items;
+      const { token = '', user = {} } = item;
+      Auth.setToken({ token });
+      const payload = user;
 
       if (success) {
-        const [item = {}] = items;
-        const { user = {} } = item;
-        return Promise.resolve(user);
+        return Promise.resolve(payload);
       } else {
         const { message = '' } = data;
         return Promise.reject(message);
@@ -39,31 +25,31 @@ export function registerUser({
     });
 }
 
-export function login({ username = '', password = '' }) {
-  return fetch(`${BASE_API_URL}/users/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+export function signup({
+  name = '',
+  username = '',
+  email = '',
+  password = '',
+  passwordConfirmation = '',
+}) {
+  return http
+    .post('/users', {
+      name,
       username,
+      email,
       password,
-    }),
-  })
-    .then((response) => {
-      return response.json();
+      passwordConfirmation,
     })
-    .then((data) => {
-      const { success, items = [] } = data;
+    .then((response) => {
+      const { data = {} } = response;
+
+      const { success } = data;
+      const payload = {};
 
       if (success) {
-        const [item = {}] = items;
-        const { token = '', user = {} } = item;
-        Auth.setToken({ token });
-        return Promise.resolve(user);
+        return Promise.resolve(payload);
       } else {
         const { message = '' } = data;
-
         return Promise.reject(message);
       }
     });

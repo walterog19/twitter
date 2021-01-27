@@ -10,14 +10,7 @@ export default function SingleTweet() {
 
   async function loadTweet({ id }) {
     const data = await API.getTweet({ id });
-    const { _id, text = '', user = {}, createdAt = '' } = data;
-    const date = new Date(createdAt).toDateString();
-    setTweet({
-      _id,
-      text,
-      user,
-      date,
-    });
+    setTweet(data);
   }
 
   useEffect(() => {

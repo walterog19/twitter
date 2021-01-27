@@ -59,7 +59,7 @@ export default function ButtonAppBar() {
           </ListItem>
           <ListItem alignItems="right" component={NavLink} to="/signin">
             <Typography variant="h6" className={classes.link}>
-              Sign In
+              Sign Up
             </Typography>
           </ListItem>
         </Toolbar>

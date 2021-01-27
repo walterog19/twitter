@@ -52,7 +52,7 @@ export default function FormSignIn({ history }) {
         className={classes.title}
         gutterBottom
       >
-        Sign In
+        Sign Up
       </Typography>
       {error && <Error message={mensajeError} type="error" tittle="Error" />}
       <form onSubmit={submit}>
